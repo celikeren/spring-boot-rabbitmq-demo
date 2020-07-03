@@ -3,7 +3,7 @@ This is a demo for messaging between two microservices with RabbitMQ in Spring B
 
 ## How To Run
 - First run this command to run rabbitmq locally.
-```cmd
+```
 docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
@@ -19,7 +19,10 @@ docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
   - POST
   - http://localhost:8080/create
-  - {"id": "1"}
+  - 
+  ```json
+  {"id": "1"}
+  ```
 
 - You can view RabbitMQ interactions on [RabbitMQ's management port](http://localhost:15672). Default username and password are both **guest**.
 
@@ -27,7 +30,7 @@ docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
 - Queues part in RabbitMQ UI will list two queues. **order.order-group** is the main queue. If there's an error when processing message, message will be sent to **order.order-group.dlq**.
 
-- When you send a GET request to "/process-dlq" ednpoint of consumer service, messages in dlq will be processed again.
+- When you send a GET request to **"/process-dlq"** endpoint of consumer service, messages in dlq will be processed again.
   - GET
   - http://localhost:8081/process-dlq
   
@@ -35,14 +38,14 @@ docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
 - Objects are sent as String after being converted to JSON.
 
-- Group declaration is important when you have more than one instance of consumer-service. If you don't declare a group in that case, your messages may be processed more than one time. But if you declare the group, all messages are processed once. For example if there are 5 messages in queue and 4 instances of consumer-service, 4 messages will be processed at the same time and 1 will wait until a consumer is idle.
+- Group declaration is important when you have more than one instance of consumer-service. If you don't declare a group in that case, your messages may be processed more than once. But if you declare the group, all messages are processed once. 
+  
+  - For example if there are 5 messages in queue and 4 instances of consumer-service, 4 messages will be processed at the same time and 1 will wait until a consumer is idle.
 ```yml
 spring.cloud.stream.bindings.orderChannel.group : order-group
 ```
 
 - You can specify the number of retries when there's an error while processing before message is sent to dlq.
 ```yml
-#spring.cloud.stream.bindings.orderChannel.consumer.max-attempts: 2
+spring.cloud.stream.bindings.orderChannel.consumer.max-attempts: 2
 ```
-
-- 
