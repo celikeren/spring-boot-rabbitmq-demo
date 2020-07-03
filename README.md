@@ -18,11 +18,8 @@ docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 - When you send **POST** request to producer-service's **"/create"** endpoint with a request body including only an **id**  in JSON, order will be sent to queue.
 
   - POST
-  - http://localhost:8080/create
-  - 
-  ```json
-  {"id": "1"}
-  ```
+  - [localhost:8080/create](http://localhost:8080/create)
+  - {"id": "1"}
 
 - You can view RabbitMQ interactions on [RabbitMQ's management port](http://localhost:15672). Default username and password are both **guest**.
 
@@ -30,11 +27,11 @@ docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 
 - Queues part in RabbitMQ UI will list two queues. **order.order-group** is the main queue. If there's an error when processing message, message will be sent to **order.order-group.dlq**.
 
-- When you send a GET request to **"/process-dlq"** endpoint of consumer service, messages in dlq will be processed again.
+- When you send a **GET** request to **"/process-dlq"** endpoint of consumer service, messages in dlq will be processed again.
   - GET
-  - http://localhost:8081/process-dlq
+  - [localhost:8081/process-dlq](http://localhost:8081/process-dlq)
   
-## In Detail
+## Some Details
 
 - Objects are sent as String after being converted to JSON.
 
