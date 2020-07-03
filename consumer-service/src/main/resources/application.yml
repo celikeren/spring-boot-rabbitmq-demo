@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: consumer-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        orderChannel:
+          destination: order
+          group : order-group
+          consumer:
+            max-attempts: 2
+      rabbit:
+        default:
+          consumer:
+            auto-bind-dlq: true
+        bindings:
+          default:
+            consumer:
+              republishToDlq: true
+      default:
+        consumer:
+          backOffInitialInterval: 10000
+
+server:
+  port: 8081
+  
+#spring.cloud.stream.bindings.submissionChannel.destination: application
+#spring.cloud.stream.bindings.submissionChannel.group : application-group
+#spring.cloud.stream.rabbit.default.consumer.auto-bind-dlq: true
+#spring.cloud.stream.bindings.submissionChannel.consumer.max-attempts: 2
+#spring.cloud.stream.rabbit.bindings.default.consumer.republishToDlq: true
+#spring.cloud.stream.default.consumer.backOffInitialInterval: 10000
